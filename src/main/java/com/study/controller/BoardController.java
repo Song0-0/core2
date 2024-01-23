@@ -4,13 +4,13 @@ import com.study.connection.ConnectionDB;
 import com.study.dto.BoardDTO;
 import lombok.extern.slf4j.Slf4j;
 
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -64,33 +64,22 @@ public class BoardController extends HttpServlet {
                 BoardDTO boardDTO = new BoardDTO();
                 boardDTO.setCategoryName(rs.getString("categoryName"));
                 boardDTO.setTitle(rs.getString("title"));
-                boardDTO.setRegName("regName");
+                boardDTO.setRegName(rs.getString("reg_name"));
+                boardDTO.setViews(rs.getInt("views"));
+                boardDTO.setRegDt(rs.getString("reg_dt"));
+                boardDTO.setModDt(rs.getString("mod_dt"));
 
                 list.add(boardDTO);
             }
             log.info(String.valueOf(list.size()));
 
-            /**
-             * [View부분] - 나중에 웹이 읽을 수 있도록 만들어야하기때문에 자바파일이 아닌 jsp로 만드는 것이다.
-             * 지금은 웹이 읽을 수 있도록 자바를 웹이 읽을 수 있도록 해준것이다.
-             * 이 부분에 직접 화면 출력되는 부분을 넣어본다.
-             * 여기에 있는 부분이 향후 view로 분리될 것이다.
-             * 뷰를 호출하지 않는다.
-             * 단지, view 부분을 표현하는 부분이다.
-             */
-            resp.setContentType("text/html");
-            req.setCharacterEncoding("utf8");
-            resp.setCharacterEncoding("utf8");
-            PrintWriter out = resp.getWriter();
-            out.println("<html><head></head></html>");
-            out.println("<h1>Hello, world, Model2, Servlet Controller </h1> <p>this is sample servlet.</p>");
+            //list의 값을 attribute를 통해 주고 받는다.
+            req.setAttribute("board", list);
 
-            for (BoardDTO boardDTO : list) {
-                out.println(boardDTO.getCategoryName());
-                out.println(boardDTO.getTitle());
-            }
-
-            out.println("</body></html>");
+            //forward 방식
+            //List의 값을 Attribute를 통해 전달한다.
+            RequestDispatcher dispatcher = req.getRequestDispatcher("/WEB-INF/views/board/list.jsp");
+            dispatcher.forward(req, resp);
 
         } catch (Exception e) {
             log.info("Error =>" + e);

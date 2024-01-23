@@ -1,7 +1,12 @@
 <%@ page import="com.study.dto.BoardDTO" %>
 <%@ page import="java.util.List" %>
-<%@ page import="com.study.dao.BoardDAO" %>
+<%@ page import="java.util.ArrayList" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+
+
+<%
+    List<BoardDTO> list2 = (ArrayList<BoardDTO>) request.getAttribute("board");
+%>
 
 <!DOCTYPE html>
 
@@ -31,24 +36,22 @@
                     <th>수정 일시</th>
                 </tr>
                 </thead>
-
                 <tbody>
                 <%
-                    BoardDAO boardDAO = BoardDAO.getDao();
-                    List<BoardDTO> list = boardDAO.getList();
-
-                for(int i=0; i<list.size(); i++){
+                    for (BoardDTO boardDTO : list2) {
                 %>
                 <tr>
-                    <td><%= list.get(i).getCategoryName()%></td>
-                    <td> <a href = "view.jsp?id = <%= list.get(i).getId()%>">
-                        <%= list.get(i).getTitle() %> </a> </td>
-                    <td><%= list.get(i).getRegName() %></td>
-                    <td><%= list.get(i).getViews() %></td>
-                    <td><%= list.get(i).getRegDt() %></td>
-                    <td><%= list.get(i).getModDt() %></td>
+                    <td><%= boardDTO.getCategoryName()%></td>
+                    <td><a href="view.jsp?id = <%= boardDTO.getId()%>">
+                        <%= boardDTO.getTitle() %></a></td>
+                    <td><%= boardDTO.getRegName() %></td>
+                    <td><%= boardDTO.getViews() %></td>
+                    <td><%= boardDTO.getRegDt() %></td>
+                    <td><%= boardDTO.getModDt() %></td>
                 </tr>
-                <% } %>
+                <%
+                    }
+                %>
                 </tbody>
             </table>
 
