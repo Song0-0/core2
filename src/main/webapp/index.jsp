@@ -13,6 +13,8 @@
 
 <a href="hello-servlet">Hello Servlet</a>
 
+<a href="/boardController"> 전체조회</a>
+
 <%
 
     ConnectionDB t = new ConnectionDB();
